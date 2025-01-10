@@ -128,7 +128,7 @@ const styles = {
     padding: '1rem 0',
   },
   emptyMessage: {
-    textAlign: 'center',
+    textAlign: 'center' as 'center',
     color: '#555',
   },
   cartItems: {
@@ -200,7 +200,7 @@ const styles = {
     width: '100%',
   },
 };
-function clearCart() {
-    throw new Error('Function not implemented.');
-}
+// function clearCart() {
+//     throw new Error('Function not implemented.');
+// }
 
