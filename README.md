@@ -1,6 +1,6 @@
 # ShopSmart - Online Shopping Platform
 
-## Visit our online store: [Click Here] (https://tokopintar.netlify.app/) or https://tokopintar.netlify.app/
+## Visit our online store: [Click Here](https://tokopintar.netlify.app/) or https://tokopintar.netlify.app/
 
 This website provides a responsive online shopping platform built using **React**, **TypeScript**, and **Vite**. The application integrates with the **EscuelaJS API** to display products and offers features like category-based filtering, a slide-in shopping cart, and a seamless user experience across devices.
 
