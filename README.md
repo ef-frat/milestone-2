@@ -1,50 +1,100 @@
-# React + TypeScript + Vite
+# ShopSmart - Online Shopping Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project provides a responsive online shopping platform built using **React**, **TypeScript**, and **Vite**. The application integrates with the **EscuelaJS API** to display products and offers features like category-based filtering, a slide-in shopping cart, and a seamless user experience across devices.
 
-Currently, two official plugins are available:
+## **Overview of the Application**
+ShopSmart enables users to browse products by categories, view detailed product information, and add items to their cart. The application implements a mobile-friendly layout and uses React Router for navigation.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## **Features Implemented**
 
-## Expanding the ESLint configuration
+### Product Listing Page
+- Displays a grid of products with images, prices, and titles.
+- Responsive design with a flexible grid layout that adjusts for desktops, tablets, and mobile screens.
+- Pagination to display 24 products per page.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Product Category Page
+- Allows users to filter and view products by category.
+- Dynamically fetched category list from the API.
+- "Add to Cart" buttons for each product.
 
-- Configure the top-level `parserOptions` property like this:
+### Product Detail Page
+- Shows detailed product information, including title, description, price, and image.
+- "Add to Cart" button for each product.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### Shopping Cart Panel
+- Slide-in panel that displays the items in the cart.
+- Options to adjust item quantities and remove products.
+- Displays the total cost and provides a "Checkout" button.
+
+### Confirmation Page
+- After completing the checkout process, displays a confirmation message: "Thank you! Your order has been processed."
+
+### Login Modal (Simulated)
+- A modal for user login (email and password input).
+- Once logged in, the user is marked as "logged in" and a "Logout" button is shown.
+
+## **Installation Instructions**
+
+### 1. Clone the Repository
+To get started, clone the project repository:
+
+```bash
+git clone https://github.com/revou-fsse-oct24/milestone-2-ef-frat
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### 2. Install Dependencies
+Make sure you have **Node.js** and **npm** (or **yarn**) installed, then run:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+npm install
+# or
+yarn install
 ```
+
+### 3. Run the Development Server
+Start the local development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+```
+The application will be available at `http://localhost:5173/`.
+
+### 4. Build for Production
+To create an optimized production build:
+
+```bash
+npm run build
+# or
+yarn build
+```
+
+### 5. Preview the Build
+To preview the production build locally:
+
+```bash
+npm run preview
+# or
+yarn preview
+```
+
+## **Technologies Used**
+
+### Frontend
+- **React** (with Hooks)
+- **TypeScript**
+- **Vite** for optimized builds and fast development
+- **React Router DOM** for client-side routing
+
+### API
+- Data fetched from the [EscuelaJS API](https://api.escuelajs.co/api/v1/products)
+
+### Styling
+- **CSS Flexbox and Grid** for a responsive layout
+- Global styling using **index.css**
+
+### Development Tools
+- **Visual Studio Code (VS Code)** for development
+- **GitHub** for version control
+- **npm/yarn** for dependency management
