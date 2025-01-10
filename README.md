@@ -1,8 +1,11 @@
 # ShopSmart - Online Shopping Platform
 
-This project provides a responsive online shopping platform built using **React**, **TypeScript**, and **Vite**. The application integrates with the **EscuelaJS API** to display products and offers features like category-based filtering, a slide-in shopping cart, and a seamless user experience across devices.
+## Here's the link for the website:
+https://tokopintar.netlify.app/
 
-## **Overview of the Application**
+This website provides a responsive online shopping platform built using **React**, **TypeScript**, and **Vite**. The application integrates with the **EscuelaJS API** to display products and offers features like category-based filtering, a slide-in shopping cart, and a seamless user experience across devices.
+
+## **Overview of the Website**
 ShopSmart enables users to browse products by categories, view detailed product information, and add items to their cart. The application implements a mobile-friendly layout and uses React Router for navigation.
 
 ## **Features Implemented**
@@ -33,51 +36,6 @@ ShopSmart enables users to browse products by categories, view detailed product 
 - A modal for user login (email and password input).
 - Once logged in, the user is marked as "logged in" and a "Logout" button is shown.
 
-## **Installation Instructions**
-
-### 1. Clone the Repository
-To get started, clone the project repository:
-
-```bash
-git clone https://github.com/revou-fsse-oct24/milestone-2-ef-frat
-```
-
-### 2. Install Dependencies
-Make sure you have **Node.js** and **npm** (or **yarn**) installed, then run:
-
-```bash
-npm install
-# or
-yarn install
-```
-
-### 3. Run the Development Server
-Start the local development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-```
-The application will be available at `http://localhost:5173/`.
-
-### 4. Build for Production
-To create an optimized production build:
-
-```bash
-npm run build
-# or
-yarn build
-```
-
-### 5. Preview the Build
-To preview the production build locally:
-
-```bash
-npm run preview
-# or
-yarn preview
-```
 
 ## **Technologies Used**
 
@@ -98,3 +56,7 @@ yarn preview
 - **Visual Studio Code (VS Code)** for development
 - **GitHub** for version control
 - **npm/yarn** for dependency management
+
+## **Future Improvements:**
+- Sort the products based on its price and/or alphabetical order
+- Improve the design and also user experience
