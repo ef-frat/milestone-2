@@ -59,6 +59,6 @@ ShopSmart enables users to browse products by categories, view detailed product 
 - **GitHub** for version control
 - **npm/yarn** for dependency management
 
-## **Future Improvements:**
+## **Future Improvements**
 - Sort the products based on its price and/or alphabetical order
 - Improve the design and also user experience
