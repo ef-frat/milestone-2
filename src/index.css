@@ -1,0 +1,43 @@
+body {
+  background-color: #f4f4f4;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+button {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover {
+  opacity: 0.6;
+  color:black;
+}
+
+h1, h2, h3 {
+  color: #333;
+}
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+button {
+  border: none;
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+button:hover:not(:disabled) {
+  background-color: #45a049;
+}
+
+.sticky-header {
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.sticky-header.scrolled {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
