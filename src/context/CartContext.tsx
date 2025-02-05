@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
+import { toast } from "react-toastify";
 
 // Define the structure of a cart item
 interface CartItem {
@@ -35,36 +36,46 @@ export const useCart = () => {
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  // Add an item to the cart
+  // ✅ Fully Fix Double Toast Issue
   const addToCart = (product: CartItem) => {
-    setCartItems((prevItems) => {
-      const existingItem = prevItems.find((item) => item.id === product.id);
-      if (existingItem) {
-        // Increment quantity if the item already exists
-        return prevItems.map((item) =>
+    // ✅ Find if the product is already in the cart BEFORE state updates
+    const existingItem = cartItems.find((item) => item.id === product.id);
+
+    if (existingItem) {
+      // ✅ Show toast message only ONCE before updating state
+      toast.info(`Updated quantity: ${existingItem.quantity + 1} 🛒`);
+      setCartItems((prevItems) =>
+        prevItems.map((item) =>
           item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      }
-      // Add a new item to the cart
-      return [...prevItems, { ...product, quantity: 1 }];
-    });
+        )
+      );
+    } else {
+      // ✅ Show toast message only ONCE before updating state
+      toast.success("Item added to cart 🛍️");
+      setCartItems((prevItems) => [...prevItems, { ...product, quantity: 1 }]);
+    }
   };
 
-  // Remove an item from the cart
+  // ✅ Remove an item from the cart with a toast message
   const removeFromCart = (productId: number) => {
+    const itemToRemove = cartItems.find((item) => item.id === productId);
+    if (itemToRemove) {
+      toast.warn(`Removed ${itemToRemove.title} from cart ❌`);
+    }
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== productId));
   };
 
-  // Increase quantity of a cart item
+  // ✅ Increase quantity of a cart item
   const increaseQuantity = (productId: number) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
         item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
       )
     );
+    toast.info("Quantity increased ➕");
   };
 
-  // Decrease quantity of a cart item (ensuring minimum quantity is 1)
+  // ✅ Decrease quantity of a cart item (ensuring minimum quantity is 1)
   const decreaseQuantity = (productId: number) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
@@ -73,15 +84,21 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           : item
       )
     );
+    toast.info("Quantity decreased ➖");
   };
 
-  // Clear all items in the cart
+  // ✅ Clear all items in the cart with a toast message
   const clearCart = () => {
+    if (cartItems.length > 0) {
+      toast.warn("Your cart has been emptied 🗑️");
+    }
     setCartItems([]);
   };
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart }}>
+    <CartContext.Provider
+      value={{ cartItems, addToCart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart }}
+    >
       {children}
     </CartContext.Provider>
   );
