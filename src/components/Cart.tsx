@@ -8,7 +8,7 @@ interface CartProps {
 }
 
 const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
-  const { cartItems, removeFromCart, clearCart } = useCart();
+  const { cartItems, removeFromCart, increaseQuantity, decreaseQuantity, clearCart } = useCart();
   const router = useRouter();
 
   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -51,23 +51,31 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
               <div style={styles.cartItems}>
                 {cartItems.map((item) => (
                   <div key={item.id} style={styles.cartItem}>
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      style={styles.productImage}
-                    />
+                    <img src={item.image} alt={item.title} style={styles.productImage} />
                     <div style={styles.productInfo}>
                       <h4 style={styles.productTitle}>{item.title}</h4>
                       <p style={styles.productPrice}>${item.price.toFixed(2)}</p>
-                      <p style={styles.quantity}>Qty: {item.quantity}</p>
+
+                      {/* Quantity Controls */}
+                      <div style={styles.quantityControls}>
+                        <button
+                          style={styles.quantityButton}
+                          onClick={() => decreaseQuantity(item.id)}
+                          disabled={item.quantity === 1}
+                        >
+                          ➖
+                        </button>
+                        <span style={styles.quantity}>{item.quantity}</span>
+                        <button
+                          style={styles.quantityButton}
+                          onClick={() => increaseQuantity(item.id)}
+                        >
+                          ➕
+                        </button>
+                      </div>
                     </div>
-                    <button
-                      data-testid={`remove-button-${item.id}`}
-                      style={styles.removeButton}
-                      onClick={() => removeFromCart(item.id)}
-                    >
-                      ✖
-                    </button>
+
+                    <button style={styles.removeButton} onClick={() => removeFromCart(item.id)}>✖</button>
                   </div>
                 ))}
               </div>
@@ -181,9 +189,23 @@ const styles = {
     fontWeight: "600",
     color: "#444",
   },
+  quantityControls: {
+    display: "flex",
+    alignItems: "center",
+    gap: "0.5rem",
+    marginTop: "0.5rem",
+  },
+  quantityButton: {
+    backgroundColor: "#ddd",
+    border: "none",
+    padding: "0.4rem 0.8rem",
+    borderRadius: "4px",
+    cursor: "pointer",
+    fontSize: "1rem",
+  },
   quantity: {
-    fontSize: "0.85rem",
-    color: "#666",
+    fontSize: "1rem",
+    fontWeight: "bold",
   },
   removeButton: {
     backgroundColor: "transparent",

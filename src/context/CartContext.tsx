@@ -14,6 +14,8 @@ interface CartContextType {
   cartItems: CartItem[];
   addToCart: (product: CartItem) => void;
   removeFromCart: (productId: number) => void;
+  increaseQuantity: (productId: number) => void;
+  decreaseQuantity: (productId: number) => void;
   clearCart: () => void;
 }
 
@@ -53,13 +55,33 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== productId));
   };
 
+  // Increase quantity of a cart item
+  const increaseQuantity = (productId: number) => {
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
+      )
+    );
+  };
+
+  // Decrease quantity of a cart item (ensuring minimum quantity is 1)
+  const decreaseQuantity = (productId: number) => {
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === productId
+          ? { ...item, quantity: Math.max(1, item.quantity - 1) }
+          : item
+      )
+    );
+  };
+
   // Clear all items in the cart
   const clearCart = () => {
     setCartItems([]);
   };
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, clearCart }}>
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart }}>
       {children}
     </CartContext.Provider>
   );
