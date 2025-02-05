@@ -38,9 +38,9 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
         }}
       >
         <div style={styles.cartHeader}>
-          <h2>🛒 Shopping Cart</h2>
+          <h2 style={styles.cartTitle}>Shopping Cart</h2>
           <button data-testid="close-button" style={styles.closeButton} onClick={onClose}>
-            ❌
+            ✖
           </button>
         </div>
         <div style={styles.cartBody}>
@@ -58,28 +58,26 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                     />
                     <div style={styles.productInfo}>
                       <h4 style={styles.productTitle}>{item.title}</h4>
-                      <p style={styles.productPrice}>
-                        Price: ${item.price.toFixed(2)}
-                      </p>
-                      <p style={styles.quantity}>Quantity: {item.quantity}</p>
+                      <p style={styles.productPrice}>${item.price.toFixed(2)}</p>
+                      <p style={styles.quantity}>Qty: {item.quantity}</p>
                     </div>
                     <button
                       data-testid={`remove-button-${item.id}`}
                       style={styles.removeButton}
                       onClick={() => removeFromCart(item.id)}
                     >
-                      ❌
+                      ✖
                     </button>
                   </div>
                 ))}
               </div>
               <div style={styles.totalContainer}>
-                <h3>Total: ${total.toFixed(2)}</h3>
+                <h3 style={styles.totalText}>Total: ${total.toFixed(2)}</h3>
                 <button data-testid="clear-cart-button" style={styles.clearCartButton} onClick={clearCart}>
-                  🗑️ Clear Cart
+                  Clear Cart
                 </button>
                 <button data-testid="checkout-button" style={styles.checkoutButton} onClick={handleCheckout}>
-                  💳 Checkout
+                  Checkout
                 </button>
               </div>
             </>
@@ -106,27 +104,38 @@ const styles = {
     position: "fixed" as "fixed",
     top: 0,
     right: 0,
-    width: "400px",
+    width: "380px",
     height: "100%",
     backgroundColor: "#fff",
-    boxShadow: "-4px 0 8px rgba(0, 0, 0, 0.1)",
-    padding: "1rem",
+    boxShadow: "-4px 0 12px rgba(0, 0, 0, 0.1)",
+    padding: "1.5rem",
     zIndex: 1000,
     display: "flex",
     flexDirection: "column" as "column",
     transform: "translateX(100%)",
     transition: "transform 0.3s ease-in-out",
+    fontFamily: "'Inter', sans-serif",
   },
   cartHeader: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
+    borderBottom: "1px solid #eee",
+    paddingBottom: "1rem",
+  },
+  cartTitle: {
+    fontSize: "1.5rem",
+    fontWeight: "600",
+    color: "#222",
   },
   closeButton: {
     backgroundColor: "transparent",
     border: "none",
     fontSize: "1.5rem",
     cursor: "pointer",
+    color: "#555",
+    transition: "color 0.2s ease-in-out",
+    padding: "0.5rem",
   },
   cartBody: {
     flex: 1,
@@ -135,7 +144,8 @@ const styles = {
   },
   emptyMessage: {
     textAlign: "center" as "center",
-    color: "#555",
+    color: "#777",
+    fontSize: "1rem",
   },
   cartItems: {
     paddingBottom: "1rem",
@@ -145,15 +155,14 @@ const styles = {
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: "1rem",
-    padding: "0.5rem",
-    border: "1px solid #ddd",
+    padding: "0.75rem",
     borderRadius: "8px",
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#f8f8f8",
   },
   productImage: {
-    width: "80px",
-    height: "80px",
-    borderRadius: "8px",
+    width: "70px",
+    height: "70px",
+    borderRadius: "6px",
     objectFit: "cover" as "cover",
   },
   productInfo: {
@@ -161,48 +170,61 @@ const styles = {
     marginLeft: "1rem",
   },
   productTitle: {
-    margin: "0 0 0.5rem",
-    fontSize: "1.1rem",
-    fontWeight: "bold" as "bold",
+    margin: "0 0 0.3rem",
+    fontSize: "1rem",
+    fontWeight: "500",
+    color: "#222",
   },
   productPrice: {
-    margin: "0.5rem 0",
-    color: "#666",
+    margin: "0.3rem 0",
+    fontSize: "0.9rem",
+    fontWeight: "600",
+    color: "#444",
   },
   quantity: {
-    margin: "0.2rem 0",
-    fontStyle: "italic" as "italic",
-    color: "#777",
+    fontSize: "0.85rem",
+    color: "#666",
   },
   removeButton: {
-    backgroundColor: "#ff4d4d",
-    color: "#fff",
+    backgroundColor: "transparent",
     border: "none",
-    padding: "0.5rem 1rem",
-    borderRadius: "4px",
+    fontSize: "1.2rem",
     cursor: "pointer",
+    color: "#777",
+    transition: "color 0.2s ease-in-out",
+    padding: "0.3rem",
   },
   totalContainer: {
     paddingTop: "1rem",
     borderTop: "1px solid #ddd",
+    textAlign: "center" as "center",
+  },
+  totalText: {
+    fontSize: "1.2rem",
+    fontWeight: "600",
+    color: "#222",
   },
   clearCartButton: {
-    backgroundColor: "#ff6f61",
+    backgroundColor: "#bbb",
     color: "#fff",
     border: "none",
-    padding: "0.75rem 1.5rem",
-    borderRadius: "4px",
+    padding: "0.8rem",
+    borderRadius: "6px",
     cursor: "pointer",
-    marginBottom: "1rem",
+    fontSize: "1rem",
     width: "100%",
+    marginBottom: "0.75rem",
+    transition: "opacity 0.2s ease-in-out",
   },
   checkoutButton: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#222",
     color: "#fff",
     border: "none",
-    padding: "0.75rem 1.5rem",
-    borderRadius: "4px",
+    padding: "0.8rem",
+    borderRadius: "6px",
     cursor: "pointer",
+    fontSize: "1rem",
     width: "100%",
+    transition: "opacity 0.2s ease-in-out",
   },
 };

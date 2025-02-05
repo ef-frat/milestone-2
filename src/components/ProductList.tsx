@@ -1,7 +1,8 @@
 import React from "react";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
+import Link from "next/link";
 
-// Define the Product type
 interface Product {
   id: number;
   title: string;
@@ -9,68 +10,123 @@ interface Product {
   images: string[];
 }
 
-// Define props for ProductList
 interface ProductListProps {
   products: Product[];
 }
 
 const ProductList: React.FC<ProductListProps> = ({ products }) => {
   const { addToCart } = useCart();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
 
   return (
-    <div style={{ padding: "1rem" }}>
-      <h2 style={{ marginBottom: "1rem" }}>Our Products:</h2>
+    <div style={{ padding: "2rem" }}>
+      <h2 style={{ marginBottom: "1.5rem", fontSize: "1.5rem", fontWeight: "600", color: "#222" }}>
+        Our Products
+      </h2>
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-          gap: "1rem",
+          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+          gap: "1.5rem",
         }}
       >
         {products.map((product) => (
           <div
             key={product.id}
             style={{
-              border: "1px solid #ddd",
-              padding: "1rem",
-              borderRadius: "8px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              height: "100%",
               backgroundColor: "#fff",
-              textAlign: "center",
+              borderRadius: "12px",
+              boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.08)",
+              overflow: "hidden",
+              transition: "transform 0.2s ease-in-out",
+              position: "relative", // Needed for the wishlist button
             }}
           >
-            <img
-              src={product.images[0] || "https://via.placeholder.com/150"}
-              alt={product.title}
-              style={{ width: "100%", height: "150px", objectFit: "cover" }}
-              onError={(e) => {
-                if (e.currentTarget.src !== "https://via.placeholder.com/150") {
-                  e.currentTarget.src = "https://via.placeholder.com/150";
-                }
-              }}
-            />
-            <h3 style={{ margin: "0.5rem 0" }}>{product.title}</h3>
-            <p style={{ fontWeight: "bold" }}>${product.price.toFixed(2)}</p>
+            <Link href={`/product/${product.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+              <div>
+                <img
+                  src={product.images[0] || "https://via.placeholder.com/250"}
+                  alt={product.title}
+                  style={{
+                    width: "100%",
+                    height: "200px",
+                    objectFit: "cover",
+                    backgroundColor: "#f8f8f8",
+                  }}
+                  onError={(e) => {
+                    if (e.currentTarget.src !== "https://via.placeholder.com/250") {
+                      e.currentTarget.src = "https://via.placeholder.com/250";
+                    }
+                  }}
+                />
+                <div style={{ padding: "1rem" }}>
+                  <h3 style={{ fontSize: "1.1rem", fontWeight: "500", marginBottom: "0.5rem", color: "#222" }}>
+                    {product.title}
+                  </h3>
+                </div>
+              </div>
+            </Link>
+
+            {/* Wishlist Button */}
             <button
-              style={{
-                backgroundColor: "#4CAF50",
-                color: "#fff",
-                border: "none",
-                padding: "0.5rem 1rem",
-                borderRadius: "4px",
-                cursor: "pointer",
-              }}
               onClick={() =>
-                addToCart({
-                  id: product.id,
-                  title: product.title,
-                  price: product.price,
-                  image: product.images[0],
-                  quantity: 1,
-                })
+                isInWishlist(product.id)
+                  ? removeFromWishlist(product.id)
+                  : addToWishlist({
+                      id: product.id,
+                      title: product.title,
+                      price: product.price,
+                      image: product.images[0],
+                    })
               }
+              style={{
+                position: "absolute",
+                top: "10px",
+                right: "10px",
+                background: "none",
+                border: "none",
+                fontSize: "1.5rem",
+                cursor: "pointer",
+                transition: "opacity 0.2s ease-in-out",
+              }}
             >
-              Add to Cart
+              {isInWishlist(product.id) ? "❤️" : "🤍"}
             </button>
+
+            {/* Price & Add to Cart Section */}
+            <div style={{ padding: "1rem", borderTop: "1px solid #eee", textAlign: "center" }}>
+              <p style={{ fontSize: "1rem", fontWeight: "600", color: "#444", marginBottom: "0.75rem" }}>
+                ${product.price.toFixed(2)}
+              </p>
+              <button
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  borderRadius: "8px",
+                  backgroundColor: "#222",
+                  color: "#fff",
+                  fontSize: "1rem",
+                  border: "none",
+                  cursor: "pointer",
+                  transition: "opacity 0.2s ease-in-out",
+                }}
+                onClick={() =>
+                  addToCart({
+                    id: product.id,
+                    title: product.title,
+                    price: product.price,
+                    image: product.images[0],
+                    quantity: 1,
+                  })
+                }
+              >
+                Add to Cart
+              </button>
+            </div>
           </div>
         ))}
       </div>
