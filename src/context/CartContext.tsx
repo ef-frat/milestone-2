@@ -36,13 +36,11 @@ export const useCart = () => {
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  // ✅ Fully Fix Double Toast Issue
+  // ✅ Add item to cart
   const addToCart = (product: CartItem) => {
-    // ✅ Find if the product is already in the cart BEFORE state updates
     const existingItem = cartItems.find((item) => item.id === product.id);
 
     if (existingItem) {
-      // ✅ Show toast message only ONCE before updating state
       toast.info(`Updated quantity: ${existingItem.quantity + 1} 🛒`);
       setCartItems((prevItems) =>
         prevItems.map((item) =>
@@ -50,13 +48,12 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         )
       );
     } else {
-      // ✅ Show toast message only ONCE before updating state
       toast.success("Item added to cart 🛍️");
       setCartItems((prevItems) => [...prevItems, { ...product, quantity: 1 }]);
     }
   };
 
-  // ✅ Remove an item from the cart with a toast message
+  // ✅ Remove item from cart
   const removeFromCart = (productId: number) => {
     const itemToRemove = cartItems.find((item) => item.id === productId);
     if (itemToRemove) {
@@ -65,7 +62,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== productId));
   };
 
-  // ✅ Increase quantity of a cart item
+  // ✅ Increase quantity
   const increaseQuantity = (productId: number) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
@@ -75,7 +72,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     toast.info("Quantity increased ➕");
   };
 
-  // ✅ Decrease quantity of a cart item (ensuring minimum quantity is 1)
+  // ✅ Decrease quantity (minimum of 1)
   const decreaseQuantity = (productId: number) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
@@ -87,12 +84,57 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     toast.info("Quantity decreased ➖");
   };
 
-  // ✅ Clear all items in the cart with a toast message
+  // ✅ Persistent Confirmation Before Clearing the Cart
   const clearCart = () => {
-    if (cartItems.length > 0) {
-      toast.warn("Your cart has been emptied 🗑️");
+    if (cartItems.length === 0) {
+      toast.info("Your cart is already empty.");
+      return;
     }
-    setCartItems([]);
+
+    const toastId = toast.warn(
+      <div>
+        <p style={{ marginBottom: "0.5rem", fontWeight: "600" }}>Are you sure you want to empty the cart?</p>
+        <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+          <button
+            onClick={() => {
+              setCartItems([]); // Clear the cart
+              toast.dismiss(toastId);
+              toast.success("Cart has been emptied. 🗑️");
+            }}
+            style={{
+              background: "#d9534f",
+              color: "#fff",
+              border: "none",
+              padding: "6px 12px",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+          >
+            Yes, Clear
+          </button>
+
+          <button
+            onClick={() => toast.dismiss(toastId)} // Dismiss the toast without clearing
+            style={{
+              background: "#5bc0de",
+              color: "#fff",
+              border: "none",
+              padding: "6px 12px",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+          >
+            No, Cancel
+          </button>
+        </div>
+      </div>,
+      {
+        autoClose: false, // 🔹 Toast stays until user interacts
+        closeOnClick: false,
+        draggable: false,
+        position: "top-right",
+      }
+    );
   };
 
   return (

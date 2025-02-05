@@ -39,7 +39,7 @@ export default function App({ Component, pageProps }: AppProps) {
         {/* Toast Notifications */}
         <ToastContainer
           position="top-right"
-          autoClose={2000} // Closes after 2 seconds
+          autoClose={1000} // Closes after 2 seconds
           hideProgressBar
           closeOnClick
           pauseOnHover
