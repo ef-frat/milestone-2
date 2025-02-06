@@ -48,7 +48,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         )
       );
     } else {
-      toast.success("Item added to cart 🛍️");
+      toast.success("Item added to cart.");
       setCartItems((prevItems) => [...prevItems, { ...product, quantity: 1 }]);
     }
   };
@@ -57,7 +57,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const removeFromCart = (productId: number) => {
     const itemToRemove = cartItems.find((item) => item.id === productId);
     if (itemToRemove) {
-      toast.warn(`Removed ${itemToRemove.title} from cart ❌`);
+      toast.warn(`❌ Removed ${itemToRemove.title} from cart.`);
     }
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== productId));
   };
@@ -69,7 +69,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
       )
     );
-    toast.info("Quantity increased ➕");
+    toast.info("➕ Quantity increased.");
   };
 
   // ✅ Decrease quantity (minimum of 1)
@@ -81,7 +81,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           : item
       )
     );
-    toast.info("Quantity decreased ➖");
+    toast.info("➖ Quantity decreased.");
   };
 
   // ✅ Separate Clear Cart function for Button and Checkout
@@ -106,7 +106,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             onClick={() => {
               setCartItems([]); // Clear the cart
               toast.dismiss(toastId);
-              toast.success("Cart has been emptied. 🗑️");
+              toast.success("🗑️ Cart has been emptied.");
             }}
             style={{
               background: "#d9534f",

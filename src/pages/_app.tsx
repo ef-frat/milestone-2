@@ -71,7 +71,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <SpinWheel isOpen={isSpinOpen} onClose={handleSpinClose} onPrizeWin={handlePrizeWin} />
 
         {/* ✅ Toast Notifications */}
-        <ToastContainer position="top-right" autoClose={2000} hideProgressBar closeOnClick pauseOnHover draggable />
+        <ToastContainer position="top-right" autoClose={800} hideProgressBar closeOnClick pauseOnHover draggable />
       </WishlistProvider>
     </CartProvider>
   );
