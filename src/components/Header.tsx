@@ -1,19 +1,27 @@
-import Link from "next/link";
+import { useRouter } from "next/router"; // ✅ Import Next.js router
 import { useCart } from "@/context/CartContext";
-import { useWishlist } from "@/context/WishlistContext"; 
+import { useWishlist } from "@/context/WishlistContext";
 
 interface HeaderProps {
   onCartOpen: () => void;
   onLoginOpen: () => void;
   onLogout: () => void;
   isLoggedIn: boolean;
+  onShopSmartClick: () => void; // ✅ Function to open spin wheel
 }
 
-export default function Header({ onCartOpen, onLoginOpen, onLogout, isLoggedIn }: HeaderProps) {
+export default function Header({ onCartOpen, onLoginOpen, onLogout, isLoggedIn, onShopSmartClick }: HeaderProps) {
   const { cartItems } = useCart();
   const { wishlist } = useWishlist();
+  const router = useRouter(); // ✅ Initialize Next.js router
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const hasWishlistItems = wishlist.length > 0;
+
+  // ✅ Clicking "SHOP SMART" navigates home & opens spin wheel
+  const handleShopSmartClick = () => {
+    onShopSmartClick(); // ✅ Open the spin wheel
+    router.push("/"); // ✅ Navigate to homepage
+  };
 
   return (
     <header
@@ -30,22 +38,24 @@ export default function Header({ onCartOpen, onLoginOpen, onLogout, isLoggedIn }
         fontFamily: "'Inter', sans-serif",
       }}
     >
-      {/* Brand Logo */}
-      <Link href="/" style={{ textDecoration: "none", color: "#222" }}>
-        <h1
-          style={{
-            fontSize: "1.5rem",
-            fontWeight: "600",
-            letterSpacing: "1px",
-            cursor: "pointer",
-            transition: "opacity 0.2s ease-in-out",
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
-          onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-        >
-          SHOP SMART
-        </h1>
-      </Link>
+      {/* ✅ SHOP SMART Button (Navigates to Home + Opens Spin Wheel) */}
+      <button
+        onClick={handleShopSmartClick}
+        style={{
+          fontSize: "1.5rem",
+          fontWeight: "600",
+          letterSpacing: "1px",
+          cursor: "pointer",
+          transition: "opacity 0.2s ease-in-out",
+          background: "none",
+          border: "none",
+          color: "#222",
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
+        onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+      >
+        SHOP SMART
+      </button>
 
       {/* Header Buttons */}
       <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
@@ -54,7 +64,7 @@ export default function Header({ onCartOpen, onLoginOpen, onLogout, isLoggedIn }
           onClick={onCartOpen}
           style={{
             position: "relative",
-            fontSize: "2rem", // Increased from 1.5rem to 2rem
+            fontSize: "2rem",
             cursor: "pointer",
             border: "none",
             background: "none",
@@ -66,7 +76,7 @@ export default function Header({ onCartOpen, onLoginOpen, onLogout, isLoggedIn }
             <span
               style={{
                 position: "absolute",
-                top: "-3px", // Adjusted for better alignment
+                top: "-3px",
                 right: "-12px",
                 backgroundColor: "#333",
                 color: "white",
@@ -85,7 +95,7 @@ export default function Header({ onCartOpen, onLoginOpen, onLogout, isLoggedIn }
         </button>
 
         {/* Wishlist Button */}
-        <Link href="/wishlist" style={{ display: "flex", alignItems: "center" }}>
+        <button onClick={() => router.push("/wishlist")} style={{ border: "none", background: "none", cursor: "pointer" }}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="30"
@@ -104,7 +114,7 @@ export default function Header({ onCartOpen, onLoginOpen, onLogout, isLoggedIn }
           >
             <path d="M20.8 4.6a5.4 5.4 0 00-7.7 0L12 5.7l-1.1-1.1a5.4 5.4 0 00-7.7 7.7L12 21l8.8-8.8a5.4 5.4 0 000-7.7z"></path>
           </svg>
-        </Link>
+        </button>
 
         {/* Login / Logout Button */}
         {!isLoggedIn ? (

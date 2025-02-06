@@ -14,9 +14,8 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   const handleCheckout = () => {
-    clearCart();
-    onClose();
-    router.push("/checkout");
+    onClose(); // ✅ Close the cart, but KEEP items in the cart
+    router.push("/checkout"); // ✅ Navigate to checkout page
   };
 
   return (
@@ -24,19 +23,11 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
       {/* Overlay */}
       <div
         data-testid="cart-overlay"
-        style={{
-          ...styles.overlay,
-          display: isOpen ? "block" : "none",
-        }}
+        style={{ ...styles.overlay, display: isOpen ? "block" : "none" }}
         onClick={onClose}
       />
       {/* Cart Panel */}
-      <div
-        style={{
-          ...styles.cartPanel,
-          transform: isOpen ? "translateX(0)" : "translateX(100%)",
-        }}
-      >
+      <div style={{ ...styles.cartPanel, transform: isOpen ? "translateX(0)" : "translateX(100%)" }}>
         <div style={styles.cartHeader}>
           <h2 style={styles.cartTitle}>Shopping Cart</h2>
           <button data-testid="close-button" style={styles.closeButton} onClick={onClose}>
@@ -66,25 +57,24 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                           ➖
                         </button>
                         <span style={styles.quantity}>{item.quantity}</span>
-                        <button
-                          style={styles.quantityButton}
-                          onClick={() => increaseQuantity(item.id)}
-                        >
+                        <button style={styles.quantityButton} onClick={() => increaseQuantity(item.id)}>
                           ➕
                         </button>
                       </div>
                     </div>
 
-                    <button style={styles.removeButton} onClick={() => removeFromCart(item.id)}>✖</button>
+                    <button style={styles.removeButton} onClick={() => removeFromCart(item.id)}>
+                      ✖
+                    </button>
                   </div>
                 ))}
               </div>
               <div style={styles.totalContainer}>
                 <h3 style={styles.totalText}>Total: ${total.toFixed(2)}</h3>
-                <button data-testid="clear-cart-button" style={styles.clearCartButton} onClick={clearCart}>
+                <button style={styles.clearCartButton} onClick={() => clearCart(false)}>
                   Clear Cart
                 </button>
-                <button data-testid="checkout-button" style={styles.checkoutButton} onClick={handleCheckout}>
+                <button style={styles.checkoutButton} onClick={handleCheckout}>
                   Checkout
                 </button>
               </div>

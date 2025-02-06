@@ -26,40 +26,64 @@ const HomePage: React.FC<HomePageProps> = ({ products }) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [visibleCount, setVisibleCount] = useState(PRODUCTS_PER_LOAD);
+  const [sortOption, setSortOption] = useState<string>("default");
 
-  // Fetch categories on mount
-const allowedCategories = ["Electronics", "Furniture", "Clothes", "Shoes"];
+  // ✅ Only show specific categories
+  const allowedCategories = ["Electronics", "Furniture", "Clothes", "Shoes"];
 
-useEffect(() => {
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get("https://api.escuelajs.co/api/v1/categories");
+  // ✅ Fetch categories on mount
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get("https://api.escuelajs.co/api/v1/categories");
 
-      // Filter categories to show only the allowed ones
-      const filteredCategories = response.data.filter((category: Category) =>
-        allowedCategories.includes(category.name)
-      );
+        // ✅ Filter categories to only include the allowed ones
+        const filteredCategories = response.data.filter((category: Category) =>
+          allowedCategories.includes(category.name)
+        );
 
-      setCategories(filteredCategories);
-    } catch (error) {
-      console.error("Failed to fetch categories:", error);
-    }
-  };
+        setCategories(filteredCategories);
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      }
+    };
 
-  fetchCategories();
-}, []);
+    fetchCategories();
+  }, []);
 
-  // Filter products when category changes
+  // ✅ Handle filtering when category changes
   useEffect(() => {
     setVisibleCount(PRODUCTS_PER_LOAD); // Reset visible products when category changes
-    if (selectedCategory === "all") {
-      setFilteredProducts(products);
-    } else {
-      setFilteredProducts(products.filter((product) => product.category.id.toString() === selectedCategory));
+
+    let updatedProducts = products;
+
+    if (selectedCategory !== "all") {
+      updatedProducts = products.filter(
+        (product) => product.category.id.toString() === selectedCategory
+      );
     }
+
+    setFilteredProducts(updatedProducts);
   }, [selectedCategory, products]);
 
-  // Handle Load More
+  // ✅ Sorting function
+  const getSortedProducts = () => {
+    let sorted = [...filteredProducts];
+
+    if (sortOption === "priceLowToHigh") {
+      sorted.sort((a, b) => a.price - b.price);
+    } else if (sortOption === "priceHighToLow") {
+      sorted.sort((a, b) => b.price - a.price);
+    } else if (sortOption === "nameAZ") {
+      sorted.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (sortOption === "nameZA") {
+      sorted.sort((a, b) => b.title.localeCompare(a.title));
+    }
+
+    return sorted;
+  };
+
+  // ✅ Handle Load More
   const loadMoreProducts = () => {
     setVisibleCount((prev) => prev + PRODUCTS_PER_LOAD);
   };
@@ -68,28 +92,48 @@ useEffect(() => {
     <div style={{ padding: "1rem" }}>
       <h1>Welcome to Shop Smart</h1>
 
-      {/* Category Filter Dropdown */}
-      <div style={{ marginBottom: "1rem" }}>
-        <label htmlFor="category">Filter by Category: </label>
-        <select
-          id="category"
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          style={{ padding: "0.5rem", borderRadius: "5px", marginLeft: "0.5rem" }}
-        >
-          <option value="all">All Categories</option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.id.toString()}>
-              {category.name}
-            </option>
-          ))}
-        </select>
+      {/* ✅ Category Filter & Sorting Options */}
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "1rem" }}>
+        {/* Category Filter */}
+        <div>
+          <label htmlFor="category">Filter by Category: </label>
+          <select
+            id="category"
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            style={{ padding: "0.5rem", borderRadius: "5px", marginLeft: "0.5rem" }}
+          >
+            <option value="all">All Categories</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id.toString()}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Sorting Options */}
+        <div>
+          <label htmlFor="sort">Sort by: </label>
+          <select
+            id="sort"
+            value={sortOption}
+            onChange={(e) => setSortOption(e.target.value)}
+            style={{ padding: "0.5rem", borderRadius: "5px", marginLeft: "0.5rem" }}
+          >
+            <option value="default">Default</option>
+            <option value="priceLowToHigh">Price: Low to High</option>
+            <option value="priceHighToLow">Price: High to Low</option>
+            <option value="nameAZ">Name: A - Z</option>
+            <option value="nameZA">Name: Z - A</option>
+          </select>
+        </div>
       </div>
 
-      {/* Display Visible Products */}
-      <ProductList products={filteredProducts.slice(0, visibleCount)} />
+      {/* ✅ Display Sorted & Visible Products */}
+      <ProductList products={getSortedProducts().slice(0, visibleCount)} />
 
-      {/* Load More Button */}
+      {/* ✅ Load More Button */}
       {visibleCount < filteredProducts.length && (
         <div style={{ display: "flex", justifyContent: "center", marginTop: "1rem" }}>
           <button
@@ -111,15 +155,15 @@ useEffect(() => {
   );
 };
 
-// Fetch products on the server
+// ✅ Fetch products on the server
 export async function getServerSideProps() {
   try {
     const response = await axios.get("https://api.escuelajs.co/api/v1/products?limit=200");
     console.log("Total products fetched:", response.data.length);
-    
+
     return {
       props: {
-        products: response.data, 
+        products: response.data, // Fetch up to 200 products
       },
     };
   } catch (error) {

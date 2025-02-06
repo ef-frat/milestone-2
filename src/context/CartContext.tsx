@@ -17,7 +17,7 @@ interface CartContextType {
   removeFromCart: (productId: number) => void;
   increaseQuantity: (productId: number) => void;
   decreaseQuantity: (productId: number) => void;
-  clearCart: () => void;
+  clearCart: (silent?: boolean) => void; // ✅ Added optional "silent" mode
 }
 
 // Create the context
@@ -84,8 +84,15 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     toast.info("Quantity decreased ➖");
   };
 
-  // ✅ Persistent Confirmation Before Clearing the Cart
-  const clearCart = () => {
+  // ✅ Separate Clear Cart function for Button and Checkout
+  const clearCart = (silent = false) => {
+    if (silent) {
+      // Silent mode (Used for checkout, No Toast)
+      setCartItems([]);
+      return;
+    }
+
+    // Normal "Clear Cart" button (Shows Confirmation Toast)
     if (cartItems.length === 0) {
       toast.info("Your cart is already empty.");
       return;
@@ -129,7 +136,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         </div>
       </div>,
       {
-        autoClose: false, // 🔹 Toast stays until user interacts
+        autoClose: false,
         closeOnClick: false,
         draggable: false,
         position: "top-right",
