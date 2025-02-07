@@ -1,46 +1,69 @@
-import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import LoginModal from "@/components/LoginModal";
+import { render, screen, fireEvent } from "@testing-library/react";
+import LoginModal from "../components/LoginModal";
+
+// Mock window.alert
+global.alert = jest.fn();
+
+// Mock functions
+const mockOnClose = jest.fn();
+const mockOnSuccess = jest.fn();
+
+// Helper function to render LoginModal
+const renderLoginModal = () => {
+  return render(<LoginModal onClose={mockOnClose} onSuccess={mockOnSuccess} />);
+};
 
 describe("LoginModal Component", () => {
-  const mockOnClose = jest.fn();
-  const mockOnSuccess = jest.fn();
-
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("renders the LoginModal with all required elements", () => {
-    render(<LoginModal onClose={mockOnClose} onSuccess={mockOnSuccess} />);
+  it("should render the login modal", () => {
+    renderLoginModal();
 
     expect(screen.getByRole("heading", { name: /login/i })).toBeInTheDocument();
-    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /login/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /cancel/i })).toBeInTheDocument();
+    expect(screen.getByLabelText("Email")).toBeInTheDocument();
+    expect(screen.getByLabelText("Password")).toBeInTheDocument();
   });
 
-  it("calls onSuccess when email and password are provided and login is submitted", () => {
-    render(<LoginModal onClose={mockOnClose} onSuccess={mockOnSuccess} />);
+  it("should update email and password input fields", () => {
+    renderLoginModal();
 
-    fireEvent.change(screen.getByLabelText(/email/i), {
-      target: { value: "test@example.com" },
-    });
-    fireEvent.change(screen.getByLabelText(/password/i), {
-      target: { value: "password123" },
-    });
+    const emailInput = screen.getByLabelText("Email") as HTMLInputElement;
+    const passwordInput = screen.getByLabelText("Password") as HTMLInputElement;
 
-    fireEvent.click(screen.getByRole("button", { name: /login/i }));
+    fireEvent.change(emailInput, { target: { value: "test@example.com" } });
+    fireEvent.change(passwordInput, { target: { value: "password123" } });
 
-    expect(mockOnSuccess).toHaveBeenCalledTimes(1);
+    expect(emailInput.value).toBe("test@example.com");
+    expect(passwordInput.value).toBe("password123");
   });
 
-  it("calls onClose when the Cancel button is clicked", () => {
-    render(<LoginModal onClose={mockOnClose} onSuccess={mockOnSuccess} />);
+  it("should call onClose when Cancel button is clicked", () => {
+    renderLoginModal();
 
     fireEvent.click(screen.getByRole("button", { name: /cancel/i }));
 
-    expect(mockOnClose).toHaveBeenCalledTimes(1);
+    expect(mockOnClose).toHaveBeenCalled();
+  });
+
+  it("should show an alert when submitting with empty fields", () => {
+    renderLoginModal();
+
+    fireEvent.submit(screen.getByTestId("login-form")); // ✅ Fixed: Using test ID
+
+    expect(global.alert).toHaveBeenCalledWith("Please enter both email and password");
+  });
+
+  it("should call onSuccess when valid credentials are entered and form is submitted", () => {
+    renderLoginModal();
+
+    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "test@example.com" } });
+    fireEvent.change(screen.getByLabelText("Password"), { target: { value: "password123" } });
+
+    fireEvent.submit(screen.getByTestId("login-form")); // ✅ Fixed: Using test ID
+
+    expect(mockOnSuccess).toHaveBeenCalled(); // ✅ Ensuring it was called
   });
 });

@@ -22,7 +22,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
     <div style={styles.overlay}>
       <div style={styles.modal}>
         <h2>Login</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} data-testid="login-form">
           <div style={styles.formGroup}>
             <label htmlFor="email">Email</label>
             <input
