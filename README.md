@@ -10,22 +10,30 @@ Shop Smart is a dynamic e-commerce web application designed to provide users wit
 
 ## Features Implemented
 1. **Server-Side Rendering (SSR):** Ensures data is fetched on the server before rendering the page for faster load times and improved SEO.
+
 2. **User Authentication:** Middleware integration for protecting specific routes and redirecting unauthorized users.
+
 3. **Shopping Cart:** 
 - Context-based cart management with functionality to add, remove, and clear items.
 - **Enhancements**: Increase/decrease item directly in cart, Clear Cart Button with a confirmation toast.
+
 4. **Pagination:** Efficiently handles large product datasets by displaying 12 products at first and load more button if needed.
+
 5. **Error Handling:** Gracefully manages API fetch errors and provides fallback content.
+
 6. **Spin-the-Wheel Rewards:**  
 - Pop-up appears on the first visit or when clicking "Shop Smart".  
 - Users spin for **discounts, free shipping, or a mystery gift**.  
-- Applied automatically to checkout.  
+- Applied automatically to checkout.
+
 7. **Wishlist Functionality:**  
 - Save items with a simple ❤️ click.  
 - Items stay in the wishlist until removed.  
+
 8. **Product Sorting & Filtering:**  
 - Sort **alphabetically** or **by price** (low to high & high to low).  
 - Filter products **by category**. 
+
 9. **Improved Checkout Experience:**  
 - Discounts & prizes are applied automatically.  
 - Users can **continue shopping** without losing cart items.
