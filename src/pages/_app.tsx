@@ -17,24 +17,24 @@ export default function App({ Component, pageProps }: AppProps) {
   const [isSpinOpen, setIsSpinOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // ✅ Open Spin Wheel on first load
+  // Open Spin Wheel on first load
   useEffect(() => {
     setIsSpinOpen(true);
   }, []);
 
-  // ✅ Close Spin Wheel
+  // Close Spin Wheel
   const handleSpinClose = () => {
     setIsSpinOpen(false);
   };
 
-  // ✅ Handle when a prize is won
+  // Handle when a prize is won
   const handlePrizeWin = (prize: any) => {
     localStorage.setItem("spinPrize", JSON.stringify(prize));
     toast.success(`🎉 You won: ${prize.label}!`);
     setIsSpinOpen(false); // Close spin wheel after winning
   };
 
-  // ✅ Handle Login/Logout
+  // Handle Login/Logout
   const handleLoginSuccess = () => {
     setIsLoggedIn(true);
     setIsLoginOpen(false);
@@ -55,22 +55,22 @@ export default function App({ Component, pageProps }: AppProps) {
           onShopSmartClick={() => setIsSpinOpen(true)}
         />
 
-        {/* ✅ Main Content */}
+        {/* Main Content */}
         <main style={{ minHeight: "80vh" }}>
           <Component {...pageProps} />
         </main>
 
-        {/* ✅ Footer */}
+        {/* Footer */}
         <Footer />
 
-        {/* ✅ Cart & Login Modal */}
+        {/* Cart & Login Modal */}
         <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
         {isLoginOpen && <LoginModal onClose={() => setIsLoginOpen(false)} onSuccess={handleLoginSuccess} />}
 
-        {/* ✅ Spin the Wheel Pop-up */}
+        {/* Spin the Wheel Pop-up */}
         <SpinWheel isOpen={isSpinOpen} onClose={handleSpinClose} onPrizeWin={handlePrizeWin} />
 
-        {/* ✅ Toast Notifications */}
+        {/* Toast Notifications */}
         <ToastContainer position="top-right" autoClose={800} hideProgressBar closeOnClick pauseOnHover draggable />
       </WishlistProvider>
     </CartProvider>

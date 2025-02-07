@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 
+// List of Prozes
 const prizes = [
-  { label: "10% Off Discount 🎉", discount: 10 },
-  { label: "Free Shipping 🚚", freeShipping: true },
-  { label: "15% Off Discount 🔥", discount: 15 },
-  { label: "Buy 1 Get 1 Free 🛍️", bogo: true },
-  { label: "5% Cashback 💰", discount: 5 },
-  { label: "Mystery Gift 🎁", mysteryGift: true },
+  { label: "🎉  10% Off Discount  🎉", discount: 10 },
+  { label: "🚚  Free Shipping  🚚", freeShipping: true },
+  { label: "🔥  15% Off Discount  🔥", discount: 15 },
+  { label: "🛍️  Buy 1 Get 1 Free  🛍️", bogo: true },
+  { label: "💰  5% Cashback  💰", discount: 5 },
+  { label: "🎁  Mystery Gift  🎁", mysteryGift: true },
 ];
 
 const SpinWheel: React.FC<{ isOpen: boolean; onClose: () => void; onPrizeWin: (prize: any) => void }> = ({
@@ -38,17 +39,38 @@ const SpinWheel: React.FC<{ isOpen: boolean; onClose: () => void; onPrizeWin: (p
       ariaHideApp={false}
       style={{
         overlay: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
-        content: { width: "400px", height: "450px", margin: "auto", padding: "2rem", textAlign: "center" },
+        content: { width: "350px", height: "350px", margin: "auto", padding: "3rem", textAlign: "center" },
       }}
     >
+
+      {/* "X" Button (Top Right) */}
+      <button
+        onClick={onClose}
+        style={{
+          position: "absolute",
+          top: "10px",
+          right: "10px",
+          background: "none",
+          border: "none",
+          fontSize: "1.5rem",
+          cursor: "pointer",
+          color: "#777",
+          transition: "color 0.2s ease-in-out",
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.color = "#222")}
+        onMouseLeave={(e) => (e.currentTarget.style.color = "#777")}
+      >
+        ✖
+      </button>
+
       <h2>🎡 Spin the Wheel! 🎡</h2>
-      <p>Spin and get a special reward for your purchase!</p>
+      <p>Want a special reward for your purchase?</p>
 
       {/* Wheel Image */}
       <div
         style={{
-          width: "150px",
-          height: "150px",
+          width: "200px",
+          height: "200px",
           margin: "20px auto",
           borderRadius: "50%",
           backgroundColor: "#f8b400",
@@ -64,28 +86,12 @@ const SpinWheel: React.FC<{ isOpen: boolean; onClose: () => void; onPrizeWin: (p
         }}
         onClick={handleSpin}
       >
-        {spinning ? "🎰 Spinning..." : "🎯 Spin Now!"}
+        {spinning ? "Spinning..." : "🎯 Click Here!"}
       </div>
 
       {/* Display Prize */}
-      {selectedPrize && <p style={{ fontSize: "1.2rem", fontWeight: "bold" }}>🎉 You won: {selectedPrize}!</p>}
+      {selectedPrize && <p style={{ fontSize: "1 rem", fontWeight: "bold" }}>🎉🎉 You won: {selectedPrize}!</p>}
 
-      {/* Close Button */}
-      <button
-        onClick={onClose}
-        style={{
-          marginTop: "1rem",
-          padding: "0.7rem 1.2rem",
-          borderRadius: "8px",
-          backgroundColor: "#ff4d4d",
-          color: "#fff",
-          fontSize: "1rem",
-          border: "none",
-          cursor: "pointer",
-        }}
-      >
-        Close
-      </button>
     </Modal>
   );
 };

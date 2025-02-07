@@ -12,7 +12,7 @@ interface WishlistContextType {
   addToWishlist: (item: WishlistItem) => void;
   removeFromWishlist: (id: number) => void;
   clearWishlist: () => void;
-  isInWishlist: (id: number) => boolean; // ✅ Add isInWishlist function type
+  isInWishlist: (id: number) => boolean;
 }
 
 const WishlistContext = createContext<WishlistContextType | undefined>(undefined);

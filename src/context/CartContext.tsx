@@ -17,7 +17,7 @@ interface CartContextType {
   removeFromCart: (productId: number) => void;
   increaseQuantity: (productId: number) => void;
   decreaseQuantity: (productId: number) => void;
-  clearCart: (silent?: boolean) => void; // ✅ Added optional "silent" mode
+  clearCart: (silent?: boolean) => void; // Added optional "silent" mode
 }
 
 // Create the context
@@ -36,7 +36,7 @@ export const useCart = () => {
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  // ✅ Add item to cart
+  // Add item to cart
   const addToCart = (product: CartItem) => {
     const existingItem = cartItems.find((item) => item.id === product.id);
 
@@ -53,7 +53,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  // ✅ Remove item from cart
+  // Remove item from cart
   const removeFromCart = (productId: number) => {
     const itemToRemove = cartItems.find((item) => item.id === productId);
     if (itemToRemove) {
@@ -62,7 +62,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== productId));
   };
 
-  // ✅ Increase quantity
+  // Increase quantity
   const increaseQuantity = (productId: number) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
@@ -72,7 +72,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     toast.info("➕ Quantity increased.");
   };
 
-  // ✅ Decrease quantity (minimum of 1)
+  // Decrease quantity (minimum of 1)
   const decreaseQuantity = (productId: number) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
@@ -84,7 +84,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     toast.info("➖ Quantity decreased.");
   };
 
-  // ✅ Separate Clear Cart function for Button and Checkout
+  // Separate Clear Cart function for Button and Checkout
   const clearCart = (silent = false) => {
     if (silent) {
       // Silent mode (Used for checkout, No Toast)
@@ -109,7 +109,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
               toast.success("🗑️ Cart has been emptied.");
             }}
             style={{
-              background: "#d9534f",
+              background: "#222",
               color: "#fff",
               border: "none",
               padding: "6px 12px",

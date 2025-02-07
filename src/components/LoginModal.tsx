@@ -95,7 +95,7 @@ const styles = {
     justifyContent: "space-between",
   },
   loginButton: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#5bc0de",
     color: "#fff",
     border: "none",
     padding: "0.75rem 1.5rem",

@@ -28,16 +28,16 @@ const HomePage: React.FC<HomePageProps> = ({ products }) => {
   const [visibleCount, setVisibleCount] = useState(PRODUCTS_PER_LOAD);
   const [sortOption, setSortOption] = useState<string>("default");
 
-  // ✅ Only show specific categories
+  // Only show specific categories
   const allowedCategories = ["Electronics", "Furniture", "Clothes", "Shoes"];
 
-  // ✅ Fetch categories on mount
+  // Fetch categories on mount
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get("https://api.escuelajs.co/api/v1/categories");
 
-        // ✅ Filter categories to only include the allowed ones
+        // Filter categories to only include the allowed ones
         const filteredCategories = response.data.filter((category: Category) =>
           allowedCategories.includes(category.name)
         );
@@ -51,7 +51,7 @@ const HomePage: React.FC<HomePageProps> = ({ products }) => {
     fetchCategories();
   }, []);
 
-  // ✅ Handle filtering when category changes
+  // Handle filtering when category changes
   useEffect(() => {
     setVisibleCount(PRODUCTS_PER_LOAD); // Reset visible products when category changes
 
@@ -66,7 +66,7 @@ const HomePage: React.FC<HomePageProps> = ({ products }) => {
     setFilteredProducts(updatedProducts);
   }, [selectedCategory, products]);
 
-  // ✅ Sorting function
+  // Sorting function
   const getSortedProducts = () => {
     let sorted = [...filteredProducts];
 
@@ -83,7 +83,7 @@ const HomePage: React.FC<HomePageProps> = ({ products }) => {
     return sorted;
   };
 
-  // ✅ Handle Load More
+  // Handle Load More
   const loadMoreProducts = () => {
     setVisibleCount((prev) => prev + PRODUCTS_PER_LOAD);
   };
@@ -92,7 +92,7 @@ const HomePage: React.FC<HomePageProps> = ({ products }) => {
     <div style={{ padding: "1rem" }}>
       <h1>Welcome to Shop Smart</h1>
 
-      {/* ✅ Category Filter & Sorting Options */}
+      {/* Category Filter & Sorting Options */}
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "1rem" }}>
         {/* Category Filter */}
         <div>
@@ -130,10 +130,10 @@ const HomePage: React.FC<HomePageProps> = ({ products }) => {
         </div>
       </div>
 
-      {/* ✅ Display Sorted & Visible Products */}
+      {/* Display Sorted & Visible Products */}
       <ProductList products={getSortedProducts().slice(0, visibleCount)} />
 
-      {/* ✅ Load More Button */}
+      {/* Load More Button */}
       {visibleCount < filteredProducts.length && (
         <div style={{ display: "flex", justifyContent: "center", marginTop: "1rem" }}>
           <button
@@ -141,7 +141,7 @@ const HomePage: React.FC<HomePageProps> = ({ products }) => {
             style={{
               padding: "0.75rem 1.5rem",
               borderRadius: "5px",
-              backgroundColor: "#007bff",
+              backgroundColor: "#5bc0de",
               color: "#fff",
               border: "none",
               cursor: "pointer",
@@ -155,7 +155,7 @@ const HomePage: React.FC<HomePageProps> = ({ products }) => {
   );
 };
 
-// ✅ Fetch products on the server
+// Fetch products on the server
 export async function getServerSideProps() {
   try {
     const response = await axios.get("https://api.escuelajs.co/api/v1/products?limit=200");
@@ -163,7 +163,7 @@ export async function getServerSideProps() {
 
     return {
       props: {
-        products: response.data, // Fetch up to 200 products
+        products: response.data,
       },
     };
   } catch (error) {
