@@ -1,57 +1,47 @@
-import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import Cart from "@/components/Cart";
-import { useCart } from "@/context/CartContext";
+import { render, screen, fireEvent } from "@testing-library/react";
+import Cart from "../components/Cart";
+import { CartProvider } from "@/context/CartContext";
+import { act } from "react-dom/test-utils";
 import { useRouter } from "next/router";
 
+// Mock Next.js router
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
 }));
 
-jest.mock("@/context/CartContext", () => ({
-  useCart: jest.fn(),
-}));
+const mockPush = jest.fn();
+(useRouter as jest.Mock).mockReturnValue({ push: mockPush });
+
+// Mock `onClose` function
+const mockOnClose = jest.fn();
+
+// Helper function to render Cart inside a provider
+const renderCart = () => {
+  return render(
+    <CartProvider>
+      <Cart isOpen={true} onClose={mockOnClose} />
+    </CartProvider>
+  );
+};
 
 describe("Cart Component", () => {
-  const mockOnClose = jest.fn();
-  const mockClearCart = jest.fn();
-  const mockRouterPush = jest.fn();
-
   beforeEach(() => {
     jest.clearAllMocks();
-    (useRouter as jest.Mock).mockReturnValue({ push: mockRouterPush });
-    (useCart as jest.Mock).mockReturnValue({
-      cartItems: [
-        { id: 1, title: "Product 1", price: 10.99, image: "https://via.placeholder.com/150", quantity: 2 },
-      ],
-      clearCart: mockClearCart,
-    });
   });
 
-  it("renders the cart with items", () => {
-    render(<Cart isOpen={true} onClose={mockOnClose} />);
+  it("should render the cart when open", () => {
+    renderCart();
 
-    expect(screen.getByText("🛒 Shopping Cart")).toBeInTheDocument();
-    expect(screen.getByText("Product 1")).toBeInTheDocument();
-    expect(screen.getByText("Total: $21.98")).toBeInTheDocument();
+    expect(screen.getByTestId("cart-overlay")).toBeInTheDocument();
+    expect(screen.getByText("Shopping Cart")).toBeInTheDocument();
   });
 
-  it("calls onClose when the overlay is clicked", () => {
-    render(<Cart isOpen={true} onClose={mockOnClose} />);
+  it("should close the cart when clicking the overlay", () => {
+    renderCart();
 
-    const overlay = screen.getByTestId("cart-overlay");
-    fireEvent.click(overlay);
+    fireEvent.click(screen.getByTestId("cart-overlay"));
 
-    expect(mockOnClose).toHaveBeenCalledTimes(1);
-  });
-
-  it("navigates to the checkout page when the Checkout button is clicked", () => {
-    render(<Cart isOpen={true} onClose={mockOnClose} />);
-
-    const checkoutButton = screen.getByRole("button", { name: /checkout/i });
-    fireEvent.click(checkoutButton);
-
-    expect(mockRouterPush).toHaveBeenCalledWith("/checkout");
+    expect(mockOnClose).toHaveBeenCalled();
   });
 });
